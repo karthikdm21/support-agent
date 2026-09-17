@@ -11,8 +11,10 @@ df = con.execute(f"""
            response_tweet_id, in_response_to_tweet_id
     FROM read_csv_auto('data/twcs.csv')
     WHERE author_id = '{BRAND}'
-       OR in_response_to_tweet_id IN (
-           SELECT tweet_id FROM read_csv_auto('data/twcs.csv') WHERE author_id = '{BRAND}'
+       OR tweet_id IN (
+           SELECT in_response_to_tweet_id
+           FROM read_csv_auto('data/twcs.csv')
+           WHERE author_id = '{BRAND}' AND in_response_to_tweet_id IS NOT NULL
        )
 """).df()
 
@@ -29,6 +31,13 @@ pairs = customer_tweets.merge(
 )
 
 print(f"Matched {len(pairs)} customer-brand reply pairs")
+
+# Keep only conversations that START with the customer — i.e. the customer's
+# tweet wasn't itself a reply to an earlier tweet. This gives us the real
+# initial complaint, not a mid-thread fragment answering a clarifying question.
+pairs = pairs[pairs['in_response_to_tweet_id_customer'].isna()]
+
+print(f"First-message-only pairs: {len(pairs)} rows")
 
 def clean_text(text):
     text = str(text)
