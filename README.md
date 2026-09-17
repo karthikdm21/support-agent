@@ -206,7 +206,7 @@ REPORT.md                          # framing, results, failure analysis, decisio
 
 <div align="center">
 
-Built for the Hiver SDE Intern Assignment by <a href="https://github.com/karthikdm21">karthikdm21</a>
+Built by  <a href="https://github.com/karthikdm21">karthikdm21</a>
 
 AI coding assistance (Claude) was used for debugging, code review, and documentation — all code was written and understood incrementally.
 
